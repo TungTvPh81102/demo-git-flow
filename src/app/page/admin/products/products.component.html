@@ -1,0 +1,60 @@
+<div class="d-flex justify-content-between">
+  <h1>Danh sách sản phẩm</h1>
+  <a href="/admin/products/create" class="btn btn-primary ml-auto">Thêm mới</a>
+</div>
+<table class="table table-border table-responsive">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Price</th>
+      <th>Image</th>
+      <th>Available</th>
+      <th>Category</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for(product of products; track product.id; let i = $index) {
+    <tr>
+      <td>{{ i + 1 }}</td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.price }}</td>
+      <td>
+        @if(product.image) {
+        <img
+          src="{{ product.image }}"
+          alt="{{ product.name }}"
+          width="50"
+          height="50"
+        />
+        } @else {
+        <h1>Updating...</h1>
+        }
+      </td>
+      <td>{{ product.available ? "Còn hàng" : "Hết hàng" }}</td>
+      <td>{{ product.category }}</td>
+      <td>
+        <button (click)="show(product)" class="btn btn-info">Show</button>
+        <button (click)="edit(product)" class="btn btn-warning">Edit</button>
+        <button (click)="handleRemove(product.id!)" class="btn btn-danger ms-2">
+          Delete
+        </button>
+      </td>
+    </tr>
+    }
+  </tbody>
+</table>
+
+@if(selectedProduct) {
+<app-product-detail [product]="selectedProduct"></app-product-detail>
+}
+
+@if (editProduct) {
+<app-product-edit
+  [product]="editProduct"
+  (onEdit)="onHandleEdit($event)"
+></app-product-edit>
+}
+
+<app-product-add (onAdd)="onHandleAdd($event)"></app-product-add>
